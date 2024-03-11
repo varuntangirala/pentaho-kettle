@@ -22,13 +22,12 @@
 
 package org.pentaho.di.connections.vfs;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemOptions;
-import org.pentaho.di.connections.ConnectionDetails;
 import org.pentaho.di.connections.ConnectionProvider;
 import org.pentaho.di.core.exception.KettleFileException;
 import org.pentaho.di.core.variables.Variables;
-import org.pentaho.di.core.variables.VariableSpace;
 import org.pentaho.di.core.vfs.KettleVFS;
 
 import java.util.List;
@@ -57,4 +56,18 @@ public interface VFSConnectionProvider<T extends VFSConnectionDetails> extends C
     return KettleVFS.getFileObject( pvfsUrl, new Variables(), getOpts( connectionDetails ) );
   }
 
+  default boolean usesBuckets( T connectionDetails ) {
+    // TODO: At this moment, HCP is configured to have buckets, however it returns no locations/buckets.
+    // This is incorrect, and should be fixed.
+    // Currently, HCP is also the only hasBuckets connection which has a domain set.
+    // PDI's code for `VFSFileProvider#getFiles()` tests for `file.getPath().matches( DOMAIN_ROOT )`
+    // on the `connectionFolder`. This test excludes any connection with a domain, given that those with a domain
+    // have an internal path formed by the protocol followed by the domain.
+    // To accommodate for this case, adding the `StringUtils.isEmpty( connectionDetails.getDomain() )` condition,
+    // but this should be removed once the HCP configuration is fixed.
+
+    return connectionDetails.hasBuckets() &&
+      StringUtils.isEmpty( connectionDetails.getDomain() ) &&
+      getResolvedRootLocation( connectionDetails ) == null;
+  }
 }

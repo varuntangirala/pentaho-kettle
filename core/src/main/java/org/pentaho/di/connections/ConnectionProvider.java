@@ -22,8 +22,8 @@
 
 package org.pentaho.di.connections;
 
+import org.pentaho.di.connections.utils.ConnectionTestOptions;
 import org.pentaho.di.core.exception.KettleException;
-import org.pentaho.di.core.variables.VariableSpace;
 
 import java.util.List;
 
@@ -42,6 +42,18 @@ public interface ConnectionProvider<T extends ConnectionDetails> {
   List<T> getConnectionDetails();
 
   boolean test( T connectionDetails ) throws KettleException;
+
+  default boolean test( T connectionDetails, ConnectionTestOptions connectionTestOptions ) throws KettleException {
+    return test( connectionDetails );
+  }
+
+  default String getResolvedRootLocation(T connectionDetails ) {
+    return connectionDetails.getRootLocation();
+  }
+
+  default boolean usesBuckets( T connectionDetails ) {
+    return connectionDetails.hasBuckets() && getResolvedRootLocation( connectionDetails ) == null;
+  }
 
   T prepare( T connectionDetails ) throws KettleException;
 }

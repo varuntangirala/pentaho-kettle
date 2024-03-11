@@ -41,6 +41,21 @@ public interface ConnectionDetails {
 
   String getDescription();
 
+  // metadata
+  default boolean isSupportsRootLocation() {
+    return false;
+  }
+
+  default boolean isRootLocationRequired() {
+    return false;
+  }
+
+  default String getRootLocation() {
+    return null;
+  }
+
+  default void setRootLocation(String rootLocation ) {}
+
   /**
    * Gets props associated with this ConnectionDetails.
    * Allows implementors to expose connection properties without

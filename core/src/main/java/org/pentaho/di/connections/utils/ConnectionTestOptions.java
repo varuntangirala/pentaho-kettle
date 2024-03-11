@@ -2,7 +2,7 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2019-2024 by Hitachi Vantara : http://www.pentaho.com
+ * Copyright (C) 2024 by Hitachi Vantara : http://www.pentaho.com
  *
  *******************************************************************************
  *
@@ -19,28 +19,23 @@
  * limitations under the License.
  *
  ******************************************************************************/
+package org.pentaho.di.connections.utils;
 
-package org.pentaho.di.connections.vfs.builder;
+public class ConnectionTestOptions {
 
-import org.apache.commons.vfs2.FileSystemConfigBuilder;
-import org.apache.commons.vfs2.FileSystemOptions;
+  public ConnectionTestOptions() {}
 
-/**
- * Created by bmorrise on 11/7/18.
- */
-public abstract class VFSConnectionConfigurationBuilder extends FileSystemConfigBuilder {
-
-  private FileSystemOptions fileSystemOptions;
-
-  protected VFSConnectionConfigurationBuilder( FileSystemOptions fileSystemOptions ) {
-    this.fileSystemOptions = fileSystemOptions;
+  public ConnectionTestOptions( boolean ignoreRootLocation ) {
+    this.ignoreRootLocation = ignoreRootLocation;
   }
 
-  public FileSystemOptions getFileSystemOptions() {
-    return fileSystemOptions;
+  private boolean ignoreRootLocation;
+
+  public boolean isIgnoreRootLocation() {
+    return ignoreRootLocation;
   }
 
-  public void setFileSystemOptions( FileSystemOptions fileSystemOptions ) {
-    this.fileSystemOptions = fileSystemOptions;
+  public void setIgnoreRootLocation( boolean ignoreRootLocation ) {
+    this.ignoreRootLocation = ignoreRootLocation;
   }
 }

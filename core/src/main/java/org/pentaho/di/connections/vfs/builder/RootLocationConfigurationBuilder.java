@@ -2,7 +2,7 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2019-2024 by Hitachi Vantara : http://www.pentaho.com
+ * Copyright (C) 2024 by Hitachi Vantara : http://www.pentaho.com
  *
  *******************************************************************************
  *
@@ -22,25 +22,32 @@
 
 package org.pentaho.di.connections.vfs.builder;
 
-import org.apache.commons.vfs2.FileSystemConfigBuilder;
+import org.apache.commons.vfs2.FileSystem;
 import org.apache.commons.vfs2.FileSystemOptions;
 
-/**
- * Created by bmorrise on 11/7/18.
- */
-public abstract class VFSConnectionConfigurationBuilder extends FileSystemConfigBuilder {
+public class RootLocationConfigurationBuilder extends VFSConnectionConfigurationBuilder {
 
-  private FileSystemOptions fileSystemOptions;
+  private static final String ROOT_LOCATION = "rootLocation";
 
-  protected VFSConnectionConfigurationBuilder( FileSystemOptions fileSystemOptions ) {
-    this.fileSystemOptions = fileSystemOptions;
+  public RootLocationConfigurationBuilder( FileSystemOptions fileSystemOptions ) {
+    super( fileSystemOptions );
+  }
+  public String getRootLocation() {
+    return this.getParam( getFileSystemOptions(), ROOT_LOCATION);
   }
 
-  public FileSystemOptions getFileSystemOptions() {
-    return fileSystemOptions;
+  public void setRootLocation( String rootLocation ) {
+    this.setParam( getFileSystemOptions(), ROOT_LOCATION, rootLocation );
   }
 
-  public void setFileSystemOptions( FileSystemOptions fileSystemOptions ) {
-    this.fileSystemOptions = fileSystemOptions;
+  @Override
+  protected Class<? extends FileSystem> getConfigClass() {
+    return DefaultLocationFileSystem.class;
+  }
+
+  /**
+   * Dummy class that implements FileSystem.
+   */
+  abstract static class DefaultLocationFileSystem implements FileSystem {
   }
 }
